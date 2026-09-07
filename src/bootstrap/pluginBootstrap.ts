@@ -161,7 +161,7 @@ export async function initializeCoreServices(plugin: TaskNotesPlugin): Promise<v
 
 	const { TaskSelectionService } = await import("../services/TaskSelectionService");
 	plugin.taskSelectionService = new TaskSelectionService(plugin);
-	plugin.dragDropManager = new DragDropManager(plugin);
+	plugin.dragDropManager = new DragDropManager();
 	plugin.statusBarService = new StatusBarService(plugin);
 	plugin.notificationService = new NotificationService(plugin);
 	plugin.viewPerformanceService = new ViewPerformanceService(plugin);

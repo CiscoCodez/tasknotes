@@ -69,6 +69,34 @@
     position: relative;
 }
 
+.tasknotes-plugin .task-card__calendar-drag-handle {
+    align-items: center;
+    align-self: stretch;
+    background: transparent;
+    border: 0;
+    color: var(--text-faint);
+    cursor: grab;
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: center;
+    margin: calc(-1 * var(--tn-spacing-sm)) 0;
+    padding: 0 var(--tn-spacing-xs);
+}
+
+.tasknotes-plugin .task-card__calendar-drag-handle:hover,
+.tasknotes-plugin .task-card__calendar-drag-handle:focus-visible {
+    color: var(--text-accent);
+}
+
+.tasknotes-plugin .task-card--calendar-dragging {
+    background-color: var(--background-modifier-hover);
+    opacity: 0.65;
+}
+
+.is-mobile .tasknotes-plugin .task-card__calendar-drag-handle {
+    display: none;
+}
+
 .tasknotes-plugin .task-card__content {
     flex: 1;
     display: flex;

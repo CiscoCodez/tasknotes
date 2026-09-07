@@ -54,7 +54,7 @@ import { handleCalendarTaskClick } from "../utils/clickHandlers";
 import { TaskCreationModal } from "../modals/TaskCreationModal";
 import { CalendarEventCreationModal } from "../modals/CalendarEventCreationModal";
 import { ICSEventInfoModal } from "../modals/ICSEventInfoModal";
-import { Menu, Platform, TFile, setIcon, setTooltip } from "obsidian";
+import { Menu, Notice, Platform, TFile, setIcon, setTooltip } from "obsidian";
 import type { EventRef } from "obsidian";
 import { format } from "date-fns";
 import { TaskContextMenu } from "../components/TaskContextMenu";
@@ -91,6 +91,10 @@ import { CALENDAR_END_TIME_MAX_HOUR, normalizeCalendarTimeValue } from "../utils
 import { filterEmptyProjects, sanitizeForCssClass } from "../utils/helpers";
 import { processVaultFrontMatter } from "../services/VaultMutationService";
 import { createTaskNotesLogger } from "../utils/tasknotesLogger";
+import {
+	parseTaskCalendarDragPayload,
+	type TaskCalendarDragPayload,
+} from "../utils/DragDropManager";
 
 const tasknotesLogger = createTaskNotesLogger({ tag: "Bases/CalendarView" });
 
@@ -151,6 +155,35 @@ const DEFAULT_CALENDAR_EVENT_ORDER = "start,-duration,allDay,title";
 export const TASKNOTES_CALENDAR_SORT_INDEX = "tasknotesSortIndex";
 
 const Calendar = FullCalendar;
+
+export function getScheduledValueForExternalDrop(date: Date, allDay: boolean): string {
+	return format(date, allDay ? "yyyy-MM-dd" : "yyyy-MM-dd'T'HH:mm");
+}
+
+export async function scheduleTaskFromExternalDrop(
+	plugin: TaskNotesPlugin,
+	payload: TaskCalendarDragPayload,
+	date: Date,
+	allDay: boolean
+): Promise<TaskInfo> {
+	const task = await plugin.cacheManager.getTaskInfo(payload.taskPath);
+	if (!task) {
+		throw new Error("The dragged task no longer exists.");
+	}
+	if (task.archived) {
+		throw new Error("Archived tasks cannot be scheduled from the calendar.");
+	}
+	// ponytail: recurrence scheduling stays on existing calendar events until its distinct semantics are requested.
+	if (task.recurrence || task.recurrence_parent) {
+		throw new Error("Recurring task instances must be rescheduled from their calendar event.");
+	}
+
+	return plugin.taskService.updateProperty(
+		task,
+		"scheduled",
+		getScheduledValueForExternalDrop(date, allDay)
+	);
+}
 
 type Calendar = {
 	updateSize(): void;
@@ -1332,6 +1365,7 @@ export class CalendarView extends BasesViewBase {
 				);
 			},
 			editable: true,
+			droppable: true,
 			selectable: true,
 			...(Platform.isMobile
 				? {
@@ -1378,6 +1412,9 @@ export class CalendarView extends BasesViewBase {
 			eventResize: (info) => {
 				void this.handleEventResize(info);
 			},
+			drop: (info) => {
+				void this.handleExternalTaskDrop(info);
+			},
 			select: (info) => {
 				void this.handleDateSelect(info);
 			},
@@ -1413,6 +1450,37 @@ export class CalendarView extends BasesViewBase {
 		this.scheduleTodayColumnWidthUpdate();
 		this.scheduleDailyNoteHeaderLinkUpdate();
 		this.scheduleRefreshButtonIconUpdate();
+	}
+
+	private async handleExternalTaskDrop(info: {
+		date: Date;
+		allDay: boolean;
+		draggedEl: HTMLElement;
+	}): Promise<void> {
+		const payload = parseTaskCalendarDragPayload(info.draggedEl.dataset.taskCalendarDrag);
+		if (!payload) {
+			new Notice("Could not schedule task: invalid drag data.");
+			return;
+		}
+
+		try {
+			const updatedTask = await scheduleTaskFromExternalDrop(
+				this.plugin,
+				payload,
+				info.date,
+				info.allDay
+			);
+			await this.refreshAfterDirectCalendarTaskWrite(updatedTask);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			tasknotesLogger.error("[TaskNotes][CalendarView] External task drop failed:", {
+				category: "persistence",
+				operation: "external-task-drop",
+				details: { taskPath: payload.taskPath },
+				error,
+			});
+			new Notice(`Could not schedule task: ${message}`);
+		}
 	}
 
 	private updateBasesSortIndexes(taskNotes: TaskInfo[]): void {

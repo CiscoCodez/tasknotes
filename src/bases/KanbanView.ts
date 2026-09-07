@@ -1050,8 +1050,15 @@ export class KanbanView extends BasesViewBase {
 			this.getCardOptions()
 		);
 		cardWrapper.appendChild(card);
+		this.configureCardForCalendarDrag(cardWrapper, task);
 		this.setupCardDragHandlers(cardWrapper, task);
 		return cardWrapper;
+	}
+
+	private configureCardForCalendarDrag(cardWrapper: HTMLElement, task: TaskInfo): void {
+		if (!task.archived && !task.recurrence && !task.recurrence_parent) {
+			this.plugin.dragDropManager?.makeTaskCardDraggable(cardWrapper, task);
+		}
 	}
 
 	private renderNormalTaskInDropScope(
@@ -1665,6 +1672,7 @@ export class KanbanView extends BasesViewBase {
 						);
 
 						cardWrapper.appendChild(card);
+						this.configureCardForCalendarDrag(cardWrapper, task);
 						this.currentTaskElements.set(task.path, cardWrapper);
 						this.taskInfoCache.set(task.path, task);
 
@@ -1898,6 +1906,7 @@ export class KanbanView extends BasesViewBase {
 
 				const card = createTaskCard(task, this.plugin, visibleProperties, cardOptions);
 				cardWrapper.appendChild(card);
+				this.configureCardForCalendarDrag(cardWrapper, task);
 
 				this.taskInfoCache.set(task.path, task);
 				this.setupCardDragHandlers(cardWrapper, task);
@@ -1937,6 +1946,7 @@ export class KanbanView extends BasesViewBase {
 				const card = createTaskCard(task, this.plugin, visibleProperties, cardOptions);
 
 				cardWrapper.appendChild(card);
+				this.configureCardForCalendarDrag(cardWrapper, task);
 
 				this.taskInfoCache.set(task.path, task);
 				this.setupCardDragHandlers(cardWrapper, task);
@@ -1963,6 +1973,7 @@ export class KanbanView extends BasesViewBase {
 			const card = createTaskCard(task, this.plugin, visibleProperties, cardOptions);
 
 			cardWrapper.appendChild(card);
+			this.configureCardForCalendarDrag(cardWrapper, task);
 			this.currentTaskElements.set(task.path, cardWrapper);
 			this.taskInfoCache.set(task.path, task);
 

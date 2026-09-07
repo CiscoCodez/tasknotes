@@ -1038,11 +1038,14 @@ export class TaskListView extends BasesViewBase {
 		);
 	}
 
-	private configureCardForManualReordering(
+	private configureCardDragInteractions(
 		cardEl: HTMLElement,
 		task: TaskInfo,
 		groupKey: string | null
 	): void {
+		if (!task.archived && !task.recurrence && !task.recurrence_parent) {
+			this.plugin.dragDropManager?.makeTaskCardDraggable(cardEl, task);
+		}
 		if (!this.shouldEnableManualReordering()) {
 			return;
 		}
@@ -1564,7 +1567,7 @@ export class TaskListView extends BasesViewBase {
 					const card = createTaskCard(item, this.plugin, visibleProperties, cardOptions);
 
 					// Attach drag handlers for sort_order reordering
-					this.configureCardForManualReordering(card, taskInfo, null);
+					this.configureCardDragInteractions(card, taskInfo, null);
 
 					// Cache task info for event handlers
 					this.taskInfoCache.set(taskInfo.path, taskInfo);
@@ -1648,7 +1651,7 @@ export class TaskListView extends BasesViewBase {
 			}
 
 			if (needsUpdate) {
-				this.configureCardForManualReordering(cardEl, taskInfo, null);
+				this.configureCardDragInteractions(cardEl, taskInfo, null);
 			}
 
 			this.currentTaskElements.set(taskInfo.path, cardEl);
@@ -1868,7 +1871,7 @@ export class TaskListView extends BasesViewBase {
 							cardOptions
 						);
 						// Attach drag handlers for sort_order reordering
-						this.configureCardForManualReordering(cardEl, item.task, item.groupKey);
+						this.configureCardDragInteractions(cardEl, item.task, item.groupKey);
 						this.taskInfoCache.set(item.task.path, item.task);
 						this.lastTaskSignatures.set(
 							item.task.path,
@@ -1931,7 +1934,7 @@ export class TaskListView extends BasesViewBase {
 					visibleProperties,
 					cardOptions
 				);
-				this.configureCardForManualReordering(cardEl, item.task, item.groupKey);
+				this.configureCardDragInteractions(cardEl, item.task, item.groupKey);
 				this.itemsContainer!.appendChild(cardEl);
 				this.currentTaskElements.set(item.task.path, cardEl);
 				this.taskInfoCache.set(item.task.path, item.task);
@@ -2027,7 +2030,7 @@ export class TaskListView extends BasesViewBase {
 					visibleProperties,
 					this.getCardOptions(this.currentTargetDate)
 				);
-				this.configureCardForManualReordering(
+				this.configureCardDragInteractions(
 					replacement,
 					task,
 					this.taskGroupKeys.get(task.path) ?? null

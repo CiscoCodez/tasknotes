@@ -51,6 +51,14 @@ View modes can be switched within a single `.base` file based on planning horizo
 |-----------|----------|-----------|
 | ![Week View](../assets/views-calendar-week.png) | ![Day View](../assets/views-calendar-day.png) | ![Year View](../assets/views-calendar-year.png) |
 
+### Schedule from Task List or Kanban
+
+On desktop, open a Task List or Kanban view beside the Calendar View, then drag the calendar icon on a task card onto the calendar. Dropping onto a month or all-day cell sets only the scheduled date. Dropping onto a Week, Day, or Custom Days time slot sets the scheduled date and exact local time.
+
+The drag preview uses the task's time estimate when available and otherwise uses 60 minutes. Scheduling changes only the task's mapped `scheduled` property; it does not change its due date, status, priority, completion, or create an external calendar event. A task that is already scheduled is moved rather than copied.
+
+Recurring tasks and materialized recurrence instances do not show the calendar drag handle. Reschedule those from their existing calendar events so TaskNotes can preserve their recurrence behavior. Reading-mode cards and touch dragging are not supported in this workflow.
+
 ### Performance Improvements
 
 The Calendar View uses virtual scrolling to maintain performance when displaying large numbers of events. This allows the calendar to handle extensive task lists and long time ranges without degradation in responsiveness.
