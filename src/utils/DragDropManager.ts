@@ -39,6 +39,7 @@ export function parseTaskCalendarDragPayload(value: string | undefined): TaskCal
 export class DragDropManager {
 	private draggableInstances = new Map<HTMLElement, DraggableRegistration>();
 	private documentObservers = new Map<Document, MutationObserver>();
+	private cleanupFrames = new Map<Document, number>();
 
 	makeTaskCardDraggable(
 		element: HTMLElement,
@@ -143,17 +144,31 @@ export class DragDropManager {
 
 		const Observer = document.defaultView?.MutationObserver ?? MutationObserver;
 		const observer = new Observer(() => {
-			for (const element of this.draggableInstances.keys()) {
-				if (element.ownerDocument === document && !element.isConnected) {
-					this.removeDraggable(element);
-				}
-			}
+			if (this.cleanupFrames.has(document)) return;
+			const win = document.defaultView;
+			if (!win) return;
+
+			this.cleanupFrames.set(
+				document,
+				win.requestAnimationFrame(() => {
+					this.cleanupFrames.delete(document);
+					for (const element of this.draggableInstances.keys()) {
+						if (element.ownerDocument === document && !element.isConnected) {
+							this.removeDraggable(element);
+						}
+					}
+				})
+			);
 		});
 		observer.observe(document.body, { childList: true, subtree: true });
 		this.documentObservers.set(document, observer);
 	}
 
 	destroy(): void {
+		for (const [document, frame] of this.cleanupFrames) {
+			document.defaultView?.cancelAnimationFrame(frame);
+		}
+		this.cleanupFrames.clear();
 		for (const element of [...this.draggableInstances.keys()]) {
 			this.removeDraggable(element);
 		}

@@ -12,7 +12,7 @@
   - Testers: 1
   - Setup: Desktop Obsidian with TaskNotes Kanban and Calendar Bases views open side by side, including enough cards to activate virtual scrolling.
   - Steps: Drag a calendar icon from a normal and a virtualized Kanban card to the calendar, then move cards within and between Kanban columns and repeatedly scroll cards in and out of view.
-  - Expected: Each calendar drop reschedules only that task, Kanban column/manual-order dragging remains functional, and recycled cards retain one working calendar handle without duplicate drag behavior.
+  - Expected: Calendar handles appear on every initially visible card before scrolling; each drop reschedules only that task, Kanban column/manual-order dragging remains functional, and recycled cards retain one working calendar handle without duplicate drag behavior.
 
 - [ ] **Schedule tasks in an Obsidian pop-out window**
   - Testers: 1

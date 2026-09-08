@@ -12,12 +12,26 @@ import {
 } from "../../../src/utils/DragDropManager";
 
 describe("DragDropManager", () => {
+	let animationFrameCallbacks: FrameRequestCallback[];
+
 	beforeEach(() => {
 		document.body.innerHTML = "";
 		document.body.className = "";
 		draggable.mockClear();
 		destroy.mockClear();
+		animationFrameCallbacks = [];
+		jest.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+			animationFrameCallbacks.push(callback);
+			return animationFrameCallbacks.length;
+		});
 	});
+
+	afterEach(() => jest.restoreAllMocks());
+
+	const flushMutationObserver = async () => {
+		await new Promise((resolve) => setTimeout(resolve, 0));
+		for (const callback of animationFrameCallbacks.splice(0)) callback(0);
+	};
 
 	it("registers one typed calendar drag handle per card", () => {
 		const manager = new DragDropManager();
@@ -58,12 +72,33 @@ describe("DragDropManager", () => {
 		});
 
 		first.remove();
-		await new Promise((resolve) => setTimeout(resolve, 0));
+		await flushMutationObserver();
 		expect(destroy).toHaveBeenCalledTimes(1);
 
 		manager.destroy();
 		expect(destroy).toHaveBeenCalledTimes(2);
 		expect(second.querySelector(".task-card__calendar-drag-handle")).toBeNull();
+	});
+
+	it("keeps handles registered while a Kanban column is mounted after an async render yield", async () => {
+		const manager = new DragDropManager();
+		const mountedCard = document.createElement("div");
+		document.body.appendChild(mountedCard);
+		manager.makeTaskCardDraggable(mountedCard, { path: "tasks/mounted.md", title: "Mounted" });
+
+		const detachedColumn = document.createElement("div");
+		const initialCard = document.createElement("div");
+		detachedColumn.appendChild(initialCard);
+		manager.makeTaskCardDraggable(initialCard, { path: "tasks/initial.md", title: "Initial" });
+		document.body.appendChild(document.createElement("div"));
+		await new Promise((resolve) => setTimeout(resolve, 0));
+
+		document.body.appendChild(detachedColumn);
+		for (const callback of animationFrameCallbacks.splice(0)) callback(0);
+
+		expect(initialCard.querySelector(".task-card__calendar-drag-handle")).not.toBeNull();
+		expect(destroy).not.toHaveBeenCalled();
+		manager.destroy();
 	});
 
 	it("rejects malformed payloads", () => {
