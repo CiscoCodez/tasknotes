@@ -7,6 +7,7 @@ import TaskNotesPlugin from "../main";
 import type { InterpolationValues, TranslationKey } from "../i18n";
 import { stringifyUnknown } from "../utils/stringUtils";
 import { createTaskNotesLogger } from "../utils/tasknotesLogger";
+import { extractMeetingUrl } from "../utils/meetingLinks";
 import { publishUserNotice } from "../core/userNotices";
 import { resolveTzidToIANA, wallTimeInZoneToUtcIso } from "../utils/icsTimezoneFallback";
 
@@ -569,6 +570,10 @@ export class ICSSubscriptionService extends EventEmitter {
 					const summary = event.summary || "Untitled Event";
 					const description = event.description || undefined;
 					const location = event.location || undefined;
+					const conference = vevent.getFirstPropertyValue("conference");
+					const teamsMeeting = vevent.getFirstPropertyValue(
+						"x-microsoft-skypeteamsmeetingurl"
+					);
 
 					// Handle start and end times
 					const startDate = event.startDate;
@@ -605,6 +610,13 @@ export class ICSSubscriptionService extends EventEmitter {
 						allDay: isAllDay,
 						location: location,
 						url: event.url || undefined,
+						meetingUrl: extractMeetingUrl(
+							conference,
+							teamsMeeting,
+							location,
+							description,
+							event.url
+						),
 					};
 
 					// Handle recurring events
@@ -695,6 +707,12 @@ export class ICSSubscriptionService extends EventEmitter {
 										allDay: modifiedStart.isDate,
 										location: modifiedEvent.location || location,
 										url: modifiedEvent.url || icsEvent.url,
+										meetingUrl:
+											extractMeetingUrl(
+												modifiedEvent.location,
+												modifiedEvent.description,
+												modifiedEvent.url
+											) ?? icsEvent.meetingUrl,
 										recurringEventId: eventId,
 									});
 									visibleInstanceCount++;

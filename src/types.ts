@@ -831,6 +831,7 @@ export interface ICSEvent {
 	allDay: boolean;
 	location?: string;
 	url?: string;
+	meetingUrl?: string;
 	rrule?: string; // Recurrence rule
 	recurringEventId?: string; // Stable master/series ID for expanded recurring event instances
 	color?: string; // Hex color code (e.g., "#4285F4")
@@ -987,6 +988,10 @@ export interface GoogleCalendarEvent {
 		responseStatus?: string;
 	}>;
 	htmlLink?: string;
+	hangoutLink?: string;
+	conferenceData?: {
+		entryPoints?: Array<{ entryPointType?: string; uri?: string }>;
+	};
 	recurringEventId?: string;
 	originalStartTime?: {
 		dateTime?: string;

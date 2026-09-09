@@ -2,6 +2,24 @@
 
 ## Pending - Solo
 
+- [ ] **Automatically open upcoming meetings**
+  - Testers: 1
+  - Setup: Desktop Obsidian with Google, Microsoft, and ICS calendars containing upcoming Google Meet, Zoom, and Teams events; install the Zoom and Teams desktop apps.
+  - Steps: Enable automatic meeting joining, choose native app mode and a non-zero early offset, then observe one event from each provider through its join time.
+  - Expected: Each meeting opens once at the configured early time; Zoom and Teams open in their desktop apps, Google Meet opens in the browser, and all-day or link-free events do not open.
+
+- [ ] **Control automatic meeting launch behavior**
+  - Testers: 1
+  - Setup: Desktop Obsidian with an upcoming meeting event and automatic meeting joining initially disabled.
+  - Steps: Restart Obsidian after the event enters its join window, confirm no launch, enable the feature and select browser mode for a later event, then disable it again before another event.
+  - Expected: Startup does not retroactively open a meeting already in its join window; browser mode opens the HTTPS meeting page once; disabling the setting prevents subsequent launches.
+
+- [ ] **Fall back when a meeting app is unavailable**
+  - Testers: 1
+  - Setup: Desktop Obsidian with an upcoming Zoom or Teams event whose desktop app or protocol handler is unavailable.
+  - Steps: Enable automatic meeting joining in native app mode and wait for the join time.
+  - Expected: TaskNotes attempts the native app link and falls back to the original HTTPS meeting page without repeated launches.
+
 - [ ] **Schedule Task List cards on the calendar**
   - Testers: 1
   - Setup: Desktop Obsidian with TaskNotes Task List and Calendar Bases views open side by side; include unscheduled, scheduled, recurring, and archived tasks.

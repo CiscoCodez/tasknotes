@@ -69,6 +69,7 @@ export async function cleanupPluginRuntime(plugin: TaskNotesPlugin): Promise<voi
 	plugin.autoArchiveService?.stop();
 	plugin.icsSubscriptionService?.destroy();
 	plugin.autoExportService?.destroy();
+	plugin.meetingAutoJoinService?.destroy();
 	plugin.taskLinkDetectionService?.cleanup();
 	plugin.dragDropManager?.destroy();
 	void plugin.apiService?.stop();

@@ -16,6 +16,7 @@ import { validateCalendarId, validateEventId, validateRequired } from "./validat
 import { CalendarProvider, ProviderCalendar } from "./CalendarProvider";
 import { createTaskNotesLogger } from "../utils/tasknotesLogger";
 import { publishUserNotice } from "../core/userNotices";
+import { extractMeetingUrl } from "../utils/meetingLinks";
 import { normalizeCalendarDescription } from "../utils/calendarDescription";
 
 const tasknotesLogger = createTaskNotesLogger({ tag: "Services/GoogleCalendarService" });
@@ -514,6 +515,14 @@ export class GoogleCalendarService extends CalendarProvider {
 			allDay: allDay,
 			location: googleEvent.location,
 			url: googleEvent.htmlLink,
+			meetingUrl: extractMeetingUrl(
+				googleEvent.hangoutLink,
+				...(googleEvent.conferenceData?.entryPoints
+					?.filter((entry) => entry.entryPointType === "video")
+					.map((entry) => entry.uri) ?? []),
+				googleEvent.location,
+				googleEvent.description
+			),
 			recurringEventId,
 			color: color,
 		};

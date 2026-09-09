@@ -247,6 +247,9 @@ export interface TaskNotesSettings {
 	enableGoogleCalendar: boolean;
 	enableMicrosoftCalendar: boolean;
 	disableCalendarOnMobile: boolean;
+	autoJoinMeetingsEnabled: boolean;
+	autoJoinMeetingsMinutesBefore: number;
+	autoJoinMeetingsLaunchMode: "native" | "browser";
 	// Google Calendar selection
 	enabledGoogleCalendars: string[]; // Array of calendar IDs that should be displayed
 	// Google Calendar sync tokens (for incremental sync)

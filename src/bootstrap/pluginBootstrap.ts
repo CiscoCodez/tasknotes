@@ -508,6 +508,11 @@ export function initializeServicesLazily(plugin: TaskNotesPlugin): void {
 						plugin.notifyDataChanged(undefined, false, true);
 					});
 					await plugin.microsoftCalendarService.initialize();
+
+					plugin.meetingAutoJoinService = new (
+						await import("../services/MeetingAutoJoinService")
+					).MeetingAutoJoinService(plugin);
+					plugin.meetingAutoJoinService.start();
 				}
 
 				plugin.taskFileLifecycleReconciliationService =

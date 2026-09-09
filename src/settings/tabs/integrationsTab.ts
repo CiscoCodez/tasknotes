@@ -274,6 +274,57 @@ export function renderIntegrationsTab(
 		}
 	);
 
+	createSettingGroup(
+		container,
+		{
+			heading: "Automatic meeting join",
+			description:
+				"Desktop only. Opens recognized Zoom, Google Meet, and Microsoft Teams links once at the configured time. Meeting apps and browsers may still require confirmation, camera access, or lobby admission; externally opened browser tabs cannot be closed safely by TaskNotes.",
+		},
+		(group) => {
+			group.addSetting((setting) => {
+				configureToggleSetting(setting, {
+					name: "Automatically open meetings",
+					desc: "Open upcoming meeting links while Obsidian is running.",
+					getValue: () => plugin.settings.autoJoinMeetingsEnabled,
+					setValue: (value) => {
+						plugin.settings.autoJoinMeetingsEnabled = value;
+						save();
+					},
+				});
+			});
+			group.addSetting((setting) => {
+				configureNumberSetting(setting, {
+					name: "Join early",
+					desc: "Minutes before the event start time.",
+					getValue: () => plugin.settings.autoJoinMeetingsMinutesBefore,
+					setValue: (value) => {
+						plugin.settings.autoJoinMeetingsMinutesBefore = Math.max(0, Math.min(60, value));
+						save();
+					},
+					min: 0,
+					max: 60,
+				});
+			});
+			group.addSetting((setting) => {
+				configureDropdownSetting(setting, {
+					name: "Open meetings with",
+					desc: "Native uses installed Zoom or Teams apps when possible. Google Meet always opens in the browser.",
+					options: [
+						{ value: "native", label: "Native app when available" },
+						{ value: "browser", label: "Browser" },
+					],
+					getValue: () => plugin.settings.autoJoinMeetingsLaunchMode,
+					setValue: (value) => {
+						plugin.settings.autoJoinMeetingsLaunchMode =
+							value === "browser" ? "browser" : "native";
+						save();
+					},
+				});
+			});
+		}
+	);
+
 	// OAuth Calendar Integration Section
 	createSettingGroup(
 		container,

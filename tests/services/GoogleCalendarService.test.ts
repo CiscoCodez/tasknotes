@@ -47,6 +47,7 @@ describe('GoogleCalendarService', () => {
 				start: { dateTime: '2025-10-21T10:00:00-07:00' },
 				end: { dateTime: '2025-10-21T11:00:00-07:00' },
 				location: 'Conference Room A',
+				hangoutLink: 'https://meet.google.com/abc-defg-hij',
 				htmlLink: 'https://calendar.google.com/event1'
 			},
 			{
@@ -156,7 +157,8 @@ describe('GoogleCalendarService', () => {
 				id: expect.stringContaining('event1'),
 				title: 'Team Meeting',
 				description: 'Weekly sync',
-				location: 'Conference Room A'
+				location: 'Conference Room A',
+				meetingUrl: 'https://meet.google.com/abc-defg-hij'
 			});
 			expect(events[0].allDay).toBe(false);
 			expect(events[1].allDay).toBe(true);

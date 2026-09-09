@@ -193,6 +193,7 @@ export default class TaskNotesPlugin extends Plugin {
 
 	// Notification service
 	notificationService: NotificationService;
+	meetingAutoJoinService?: import("./services/MeetingAutoJoinService").MeetingAutoJoinService;
 
 	// HTTP API service
 	apiService?: HTTPAPIService;

@@ -14,6 +14,7 @@ import { validateEventId, validateMicrosoftCalendarId, validateRequired } from "
 import { CalendarProvider, ProviderCalendar } from "./CalendarProvider";
 import { createTaskNotesLogger } from "../utils/tasknotesLogger";
 import { publishUserNotice } from "../core/userNotices";
+import { extractMeetingUrl } from "../utils/meetingLinks";
 
 const tasknotesLogger = createTaskNotesLogger({ tag: "Services/MicrosoftCalendarService" });
 
@@ -56,6 +57,8 @@ interface MicrosoftCalendarEvent {
 		displayName?: string;
 	};
 	webLink?: string;
+	onlineMeetingUrl?: string;
+	onlineMeeting?: { joinUrl?: string };
 	isAllDay?: boolean;
 	isCancelled?: boolean;
 	showAs?: string;
@@ -482,6 +485,8 @@ export class MicrosoftCalendarService extends CalendarProvider {
 					startDateTime: defaultTimeMin.toISOString(),
 					endDateTime: defaultTimeMax.toISOString(),
 					$top: MICROSOFT_CALENDAR_CONSTANTS.MAX_RESULTS_PER_REQUEST.toString(),
+					$select:
+						"id,subject,bodyPreview,body,start,end,location,webLink,isAllDay,isCancelled,showAs,type,seriesMasterId,onlineMeeting,onlineMeetingUrl",
 				});
 
 				url = `${this.baseUrl}/me/calendars/${encodeURIComponent(calendarId)}/calendarView?${params.toString()}`;
@@ -610,6 +615,13 @@ export class MicrosoftCalendarService extends CalendarProvider {
 			allDay: allDay,
 			location: msEvent.location?.displayName,
 			url: msEvent.webLink,
+			meetingUrl: extractMeetingUrl(
+				msEvent.onlineMeeting?.joinUrl,
+				msEvent.onlineMeetingUrl,
+				msEvent.location?.displayName,
+				msEvent.bodyPreview,
+				msEvent.body?.content
+			),
 			recurringEventId,
 			color: color,
 		};

@@ -58,6 +58,7 @@ describe('MicrosoftCalendarService', () => {
 					timeZone: 'UTC'
 				},
 				location: { displayName: 'Teams' },
+				onlineMeetingUrl: 'https://teams.microsoft.com/l/meetup-join/abc',
 				webLink: 'https://outlook.office365.com/calendar/item/AAMkADAx',
 				isAllDay: false
 			},
@@ -203,7 +204,8 @@ describe('MicrosoftCalendarService', () => {
 				id: expect.stringContaining('AAMkADAx'),
 				title: 'Team Standup',
 				description: 'Daily sync meeting',
-				location: 'Teams'
+				location: 'Teams',
+				meetingUrl: 'https://teams.microsoft.com/l/meetup-join/abc'
 			});
 			expect(events[0].allDay).toBe(false);
 			expect(events[1].allDay).toBe(true);

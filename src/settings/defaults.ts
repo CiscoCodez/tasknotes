@@ -405,6 +405,9 @@ export const DEFAULT_SETTINGS: TaskNotesSettings = {
 	enableGoogleCalendar: false,
 	enableMicrosoftCalendar: false,
 	disableCalendarOnMobile: false,
+	autoJoinMeetingsEnabled: false,
+	autoJoinMeetingsMinutesBefore: 0,
+	autoJoinMeetingsLaunchMode: "native",
 	// Google Calendar selection (empty = show all calendars)
 	enabledGoogleCalendars: [],
 	// Google Calendar sync tokens (for incremental sync)
