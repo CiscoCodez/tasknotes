@@ -2914,6 +2914,7 @@ export const de: TranslationTree = {
 		},
 		ics: {
 			showDetails: "Details anzeigen",
+			joinMeeting: "An Besprechung teilnehmen",
 			createTask: "Aufgabe aus Event erstellen",
 			createNote: "Notiz aus Event erstellen",
 			linkNote: "Bestehende Notiz verlinken",
@@ -2923,6 +2924,7 @@ export const de: TranslationTree = {
 			copyMarkdown: "Als Markdown kopieren",
 			subscriptionUnknown: "Unbekannter Kalender",
 			notices: {
+				joinMeetingFailure: "Besprechung konnte nicht geöffnet werden",
 				copyTitleSuccess: "Event-Titel in Zwischenablage kopiert",
 				copyLocationSuccess: "Ort in Zwischenablage kopiert",
 				copyUrlSuccess: "Event-URL in Zwischenablage kopiert",

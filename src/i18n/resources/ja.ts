@@ -2914,6 +2914,7 @@ export const ja: TranslationTree = {
 		},
 		ics: {
 			showDetails: "詳細を表示",
+			joinMeeting: "会議に参加",
 			createTask: "イベントからタスクを作成",
 			createNote: "イベントからノートを作成",
 			linkNote: "既存のノートをリンク",
@@ -2923,6 +2924,7 @@ export const ja: TranslationTree = {
 			copyMarkdown: "Markdownとしてコピー",
 			subscriptionUnknown: "不明なカレンダー",
 			notices: {
+				joinMeetingFailure: "会議を開けませんでした",
 				copyTitleSuccess: "イベントタイトルをクリップボードにコピーしました",
 				copyLocationSuccess: "場所をクリップボードにコピーしました",
 				copyUrlSuccess: "イベントURLをクリップボードにコピーしました",

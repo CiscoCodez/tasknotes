@@ -2914,6 +2914,7 @@ export const ru: TranslationTree = {
 		},
 		ics: {
 			showDetails: "Показать детали",
+			joinMeeting: "Присоединиться к встрече",
 			createTask: "Создать задачу из события",
 			createNote: "Создать заметку из события",
 			linkNote: "Связать существующую заметку",
@@ -2923,6 +2924,7 @@ export const ru: TranslationTree = {
 			copyMarkdown: "Копировать как markdown",
 			subscriptionUnknown: "Неизвестный календарь",
 			notices: {
+				joinMeetingFailure: "Не удалось открыть встречу",
 				copyTitleSuccess: "Название события скопировано в буфер обмена",
 				copyLocationSuccess: "Местоположение скопировано в буфер обмена",
 				copyUrlSuccess: "URL события скопирован в буфер обмена",

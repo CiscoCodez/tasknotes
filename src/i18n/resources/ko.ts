@@ -2898,6 +2898,7 @@ export const ko: TranslationTree = {
 		},
 		ics: {
 			showDetails: "세부정보 보기",
+			joinMeeting: "회의 참여",
 			createTask: "이벤트에서 작업 만들기",
 			createNote: "이벤트에서 노트 만들기",
 			linkNote: "기존 노트 연결",
@@ -2907,6 +2908,7 @@ export const ko: TranslationTree = {
 			copyMarkdown: "마크다운으로 복사",
 			subscriptionUnknown: "알 수 없는 캘린더",
 			notices: {
+				joinMeetingFailure: "회의를 열 수 없습니다",
 				copyTitleSuccess: "이벤트 제목이 클립보드에 복사되었습니다",
 				copyLocationSuccess: "위치가 클립보드에 복사되었습니다",
 				copyUrlSuccess: "이벤트 URL이 클립보드에 복사되었습니다",

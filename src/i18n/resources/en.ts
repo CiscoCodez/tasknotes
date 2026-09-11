@@ -3101,6 +3101,7 @@ export const en: TranslationTree = {
 		},
 		ics: {
 			showDetails: "Show details",
+			joinMeeting: "Join meeting",
 			createTask: "Create task from event",
 			createNote: "Create note from event",
 			linkNote: "Link existing note",
@@ -3110,6 +3111,7 @@ export const en: TranslationTree = {
 			copyMarkdown: "Copy as Markdown",
 			subscriptionUnknown: "Unknown calendar",
 			notices: {
+				joinMeetingFailure: "Could not open meeting",
 				copyTitleSuccess: "Event title copied to clipboard",
 				copyLocationSuccess: "Location copied to clipboard",
 				copyUrlSuccess: "Event URL copied to clipboard",

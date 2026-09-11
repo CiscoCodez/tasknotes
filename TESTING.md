@@ -2,6 +2,12 @@
 
 ## Pending - Solo
 
+- [ ] **Join meetings from calendar event menus**
+  - Testers: 1
+  - Setup: Desktop Obsidian with Zoom, Google Meet, and Microsoft Teams events visible in both calendar grid and list views.
+  - Steps: Right-click each meeting event and choose **Join meeting**; repeat with native-app and browser launch modes, then right-click a non-meeting event.
+  - Expected: Meeting events show the action in both views and open once using the selected mode; Google Meet uses the browser, Zoom and Teams prefer their desktop apps in native mode, and ordinary events do not show the action.
+
 - [ ] **Automatically open upcoming meetings**
   - Testers: 1
   - Setup: Desktop Obsidian with Google, Microsoft, and ICS calendars containing upcoming Google Meet, Zoom, and Teams events; install the Zoom and Teams desktop apps.

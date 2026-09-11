@@ -2914,6 +2914,7 @@ export const fr: TranslationTree = {
 		},
 		ics: {
 			showDetails: "Afficher les détails",
+			joinMeeting: "Rejoindre la réunion",
 			createTask: "Créer une tâche depuis l'événement",
 			createNote: "Créer une note depuis l'événement",
 			linkNote: "Lier une note existante",
@@ -2923,6 +2924,7 @@ export const fr: TranslationTree = {
 			copyMarkdown: "Copier en markdown",
 			subscriptionUnknown: "Calendrier inconnu",
 			notices: {
+				joinMeetingFailure: "Impossible d'ouvrir la réunion",
 				copyTitleSuccess: "Titre de l'événement copié dans le presse-papiers",
 				copyLocationSuccess: "Lieu copié dans le presse-papiers",
 				copyUrlSuccess: "URL de l'événement copiée dans le presse-papiers",

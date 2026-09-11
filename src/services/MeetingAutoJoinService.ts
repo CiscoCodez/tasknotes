@@ -85,29 +85,29 @@ export class MeetingAutoJoinService {
 			}
 
 			this.processed.add(key);
-			const launchUrl = getMeetingLaunchUrl(
-				meetingUrl,
-				this.plugin.settings.autoJoinMeetingsLaunchMode
-			);
 			try {
-				await this.launch(launchUrl);
+				await this.openMeeting(meetingUrl);
 			} catch (error) {
-				let launchError = error;
-				if (launchUrl !== meetingUrl) {
-					try {
-						await this.launch(meetingUrl);
-						continue;
-					} catch (fallbackError) {
-						launchError = fallbackError;
-					}
-				}
 				tasknotesLogger.error("Failed to open meeting link.", {
 					category: "provider",
 					operation: "meeting-auto-join",
 					details: { eventId: event.id },
-					error: launchError,
+					error,
 				});
 			}
+		}
+	}
+
+	async openMeeting(meetingUrl: string): Promise<void> {
+		const launchUrl = getMeetingLaunchUrl(
+			meetingUrl,
+			this.plugin.settings.autoJoinMeetingsLaunchMode
+		);
+		try {
+			await this.launch(launchUrl);
+		} catch (error) {
+			if (launchUrl === meetingUrl) throw error;
+			await this.launch(meetingUrl);
 		}
 	}
 

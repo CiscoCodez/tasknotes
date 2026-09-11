@@ -2913,6 +2913,7 @@ export const zh: TranslationTree = {
 		},
 		ics: {
 			showDetails: "显示详情",
+			joinMeeting: "加入会议",
 			createTask: "从事件创建任务",
 			createNote: "从事件创建笔记",
 			linkNote: "链接现有笔记",
@@ -2922,6 +2923,7 @@ export const zh: TranslationTree = {
 			copyMarkdown: "复制为markdown",
 			subscriptionUnknown: "未知日历",
 			notices: {
+				joinMeetingFailure: "无法打开会议",
 				copyTitleSuccess: "事件标题已复制到剪贴板",
 				copyLocationSuccess: "位置已复制到剪贴板",
 				copyUrlSuccess: "事件URL已复制到剪贴板",

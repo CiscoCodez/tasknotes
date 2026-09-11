@@ -42,6 +42,7 @@ When a change has user-facing documentation, include a canonical tasknotes.dev l
 - Added desktop drag-to-schedule from Task List and Kanban task cards directly into the TaskNotes Calendar. See [Calendar Views](https://tasknotes.dev/views/calendar-views/#schedule-from-task-list-or-kanban).
   - Fixed calendar drag handles initially missing from the first visible cards in virtualized Kanban columns.
 - Added optional automatic joining for upcoming Zoom, Google Meet, and Microsoft Teams calendar events on desktop, with configurable early joining and native-app or browser launch modes.
+- Added a **Join meeting** action to the right-click menu for Zoom, Google Meet, and Microsoft Teams calendar events.
 - (#2147) Added context-menu actions for recording task completion today, on the scheduled date, on the due date, or on a chosen date. The actions can be grouped in a submenu from Appearance settings. See [Completing Tasks](https://tasknotes.dev/features/task-management/#completing-tasks).
   - Rescheduling a recurring task can reactivate affected completed or skipped instances after confirmation. See [Recurring Tasks](https://tasknotes.dev/features/recurring-tasks/).
   - Thanks to @renatomen for the contribution.

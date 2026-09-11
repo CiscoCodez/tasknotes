@@ -1,6 +1,6 @@
 import { Notice, TAbstractFile, TFile } from "obsidian";
-import TaskNotesPlugin from "../main";
-import { ICSEvent } from "../types";
+import type TaskNotesPlugin from "../main";
+import type { ICSEvent } from "../types";
 import { ICSEventInfoModal } from "../modals/ICSEventInfoModal";
 import { ICSNoteCreationModal } from "../modals/ICSNoteCreationModal";
 import { openFileSelector } from "../modals/FileSelectorModal";
@@ -9,6 +9,7 @@ import { ContextMenu } from "./ContextMenu";
 import { showCoordinatedMenu, showCoordinatedMenuAtElement } from "./ContextMenuCoordinator";
 import { createTaskNotesLogger } from "../utils/tasknotesLogger";
 import { showNotice } from "../ui/notifications";
+import { extractMeetingUrl } from "../utils/meetingLinks";
 
 const tasknotesLogger = createTaskNotesLogger({ tag: "Components/ICSEventContextMenu" });
 
@@ -39,6 +40,8 @@ export class ICSEventContextMenu {
 
 	private buildMenu(): void {
 		const { icsEvent, plugin, subscriptionName } = this.options;
+		const meetingUrl = icsEvent.meetingUrl ??
+			extractMeetingUrl(icsEvent.location, icsEvent.description, icsEvent.url);
 
 		// Show details option
 		this.menu.addItem((item) =>
@@ -55,6 +58,22 @@ export class ICSEventContextMenu {
 					modal.open();
 				})
 		);
+
+		if (meetingUrl) {
+			this.menu.addItem((item) =>
+				item
+					.setTitle(this.t("contextMenus.ics.joinMeeting"))
+					.setIcon("video")
+					.onClick(async () => {
+						try {
+							if (!plugin.meetingAutoJoinService) throw new Error("Meeting launcher unavailable");
+							await plugin.meetingAutoJoinService.openMeeting(meetingUrl);
+						} catch {
+							new Notice(this.t("contextMenus.ics.notices.joinMeetingFailure"));
+						}
+					})
+			);
+		}
 
 		this.menu.addSeparator();
 
